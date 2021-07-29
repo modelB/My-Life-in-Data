@@ -18,3 +18,11 @@ div {
     justify-content: space-between;
     width: 290px;
 }
+
+#Graph {
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    top: 50px;
+    left: 500px;
+}
