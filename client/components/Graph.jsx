@@ -34,52 +34,52 @@ const Graph = ({
 
 
     //hover
-    function hover(svg, path) {
+    // function hover(svg, path) {
   
-      if ("ontouchstart" in document) svg
-          .style("-webkit-tap-highlight-color", "transparent")
-          .on("touchmove", moved)
-          .on("touchstart", entered)
-          .on("touchend", left)
-      else svg
-          .on("mousemove", moved)
-          .on("mouseenter", entered)
-          .on("mouseleave", left);
+    //   if ("ontouchstart" in document) svg
+    //       .style("-webkit-tap-highlight-color", "transparent")
+    //       .on("touchmove", moved)
+    //       .on("touchstart", entered)
+    //       .on("touchend", left)
+    //   else svg
+    //       .on("mousemove", moved)
+    //       .on("mouseenter", entered)
+    //       .on("mouseleave", left);
     
-      const dot = svg.append("g")
-          .attr("display", "none");
+    //   const dot = svg.append("g")
+    //       .attr("display", "none");
     
-      dot.append("circle")
-          .attr("r", 2.5);
+    //   dot.append("circle")
+    //       .attr("r", 2.5);
     
-      dot.append("text")
-          .attr("font-family", "sans-serif")
-          .attr("font-size", 10)
-          .attr("text-anchor", "middle")
-          .attr("y", -8);
+    //   dot.append("text")
+    //       .attr("font-family", "sans-serif")
+    //       .attr("font-size", 10)
+    //       .attr("text-anchor", "middle")
+    //       .attr("y", -8);
     
-      function moved(event) {
-        event.preventDefault();
-        const pointer = d3.pointer(event, this);
-        const xm = x.invert(pointer[0]);
-        const ym = y.invert(pointer[1]);
-        const i = d3.bisectCenter(data.dates, xm);
-        const s = d3.least(data.series, d => Math.abs(d.values[i] - ym));
-        path.attr("stroke", d => d === s ? null : "#ddd").filter(d => d === s).raise();
-        dot.attr("transform", `translate(${x(data.dates[i])},${y(s.values[i])})`);
-        dot.select("text").text(s.name);
-      }
+    //   function moved(event) {
+    //     event.preventDefault();
+    //     const pointer = d3.pointer(event, this);
+    //     const xm = x.invert(pointer[0]);
+    //     const ym = y.invert(pointer[1]);
+    //     const i = d3.bisectCenter(data.dates, xm);
+    //     const s = d3.least(data.series, d => Math.abs(d.values[i] - ym));
+    //     path.attr("stroke", d => d === s ? null : "#ddd").filter(d => d === s).raise();
+    //     dot.attr("transform", `translate(${x(data.dates[i])},${y(s.values[i])})`);
+    //     dot.select("text").text(s.name);
+    //   }
     
-      function entered() {
-        path.style("mix-blend-mode", null).attr("stroke", "#ddd");
-        dot.attr("display", null);
-      }
+    //   function entered() {
+    //     path.style("mix-blend-mode", null).attr("stroke", "#ddd");
+    //     dot.attr("display", null);
+    //   }
     
-      function left() {
-        path.style("mix-blend-mode", "multiply").attr("stroke", null);
-        dot.attr("display", "none");
-      }
-    }
+    //   function left() {
+    //     path.style("mix-blend-mode", "multiply").attr("stroke", null);
+    //     dot.attr("display", "none");
+    //   }
+    // }
 
 
     //color func
@@ -152,8 +152,36 @@ const Graph = ({
       .join("path")
         .style("mix-blend-mode", "multiply")
         .attr("d", d => line(d.values));
+
+    svg.append("text")
+    .attr("transform", "translate(" + (width+3) + "," + y(data.series[1].values[data.series[1].values.length-1]-.05) + ")")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "start")
+    .style("fill", "red")
+    .text("Body Fat %");
   
-    svg.call(path, hover);
+    svg.append("text")
+    .attr("transform", "translate(" + (width+3) + "," + y(data.series[0].values[data.series[0].values.length-1]) + ")")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "start")
+    .style("fill", "green")
+    .text("Weight");
+
+    svg.append("text")
+    .attr("transform", "translate(" + (width+3) + "," + y(data.series[2].values[data.series[2].values.length-1]) + ")")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "start")
+    .style("fill", "purple")
+    .text("Mental Score");
+
+    svg.append("text")
+    .attr("transform", "translate(" + (width+3) + "," + y(data.series[3].values[data.series[3].values.length-1]-.05) + ")")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "start")
+    .style("fill", "grey")
+    .text("Net Worth");
+
+    svg.call(path);
 
   // svg.call(path);
 
