@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
+import axios from 'axios';
+import GoogleLogin from 'react-google-login';
 const UserList = ({
   users, setCurrentUser, deleteUser, getUserData
 }) => {
@@ -14,28 +15,28 @@ const UserList = ({
     //   setLocalUsers(tempUsers);
     //   console.log('mappedusers in userlist', localUsers);
     // })
-    let i =0;
-  function setCurrentUserAndGetData () {
-    let temp = document.querySelector('#currentInput').value;
-    console.log('temp', temp);
-    setCurrentUser(temp);
-    getUserData(temp)
+  
+  const responseGoogle = (response) => {
+    axios.post('/auth', {
+      id: response.ya,
+        first_name: response.Os.ET,
+        last_name: response.Os.GR,
+        token: response.Zb.access_token
+    }).then(()=>getUserData())
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   return (
     <div id="UserList">
-        <form key="500" action="/" method="get">
-        <label key="400">Choose person:</label>
-          <input key="300" list="user" text="fuck" name="user" id="currentInput" />
-          <button onClick={()=> {
-            event.preventDefault();
-            setCurrentUserAndGetData();
-          }}>Update User</button>
-          <datalist key="200" id="user">
-            {users.map(el => <option key={`${i++}`} value={el.full_name} />)}
-          </datalist>
-          <button onClick={()=>deleteUser(document.querySelector('#currentInput').value)} key="700">Delete User</button>
-        </form> 
+        <GoogleLogin
+            clientId="232816479761-h26msd3nrnce0dq7v89jls9p2qal3bh9.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+        />
     </div>
   );
 };

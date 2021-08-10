@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import GoogleLogin from 'react-google-login';
 
-
+import LifeNotesForm from './components/LifeNotesForm';
 import UserList from './components/UserList';
 import User from './components/User';
 
@@ -15,28 +16,13 @@ class App extends Component {
       currentUser: undefined,
       data: [],
      };
-    this.getUsers = this.getUsers.bind(this);
-    this.setCurrentUser = this.setCurrentUser.bind(this);
     this.getUserData = this.getUserData.bind(this);
-    this.deleteUser = this.deleteUser.bind(this);
     this.addData = this.addData.bind(this);
   }
   
-  getUsers () {
-    fetch('/api/users')
-        .then(res => res.json())
-        .then((data) => {
-          let newUsers = data;
-          this.setState((state, props) => {
-            return {...state, 'users': newUsers };
-          })
-        })
-        .catch(err => console.log('get users: ERROR: ', err));
-  } 
-  
   getUserData () {
     
-    fetch(`/api/userData?name=${document.querySelector('#currentInput').value}`)
+    fetch(`/api/userData`)
         .then(res => res.json())
         .then((data) => {
           let newData = data;
@@ -48,20 +34,12 @@ class App extends Component {
         .catch(err => console.log('get user Data: ERROR: ', err));
   }
 
-  deleteUser (user) {
-    fetch('/api/deleteUser', { 
-      method: 'delete', 
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ "name": user }) 
-    })
-      .catch(err => console.log('delete user Data: ERROR: ', err));
-  }
 
   addData () {
     fetch('/api/addData', { 
       method: 'post', 
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ "name": document.querySelector('#formName').value, 
+      body: JSON.stringify({
       "record_date": document.querySelector('#formDate').value, 
       "body_fat": document.querySelector('#formBodyFat').value,
       "mental_score": document.querySelector('#formMentalScore').value,
@@ -69,23 +47,17 @@ class App extends Component {
       "net_worth": document.querySelector('#formNetWorth').value
      }) 
     })
-      .catch(err => console.log('delete user Data: ERROR: ', err));
+      .catch(err => console.log('add user Data: ERROR: ', err));
   }
 
-  setCurrentUser (user) {
-    this.setState((state) => {
-      console.log('current user updated: ', user);
-      return {...state, currentUser: user };
-    })
-  }
-  
   componentDidMount() {
-    this.getUsers();
+    this.getUserData();
   }
 
-  componentDidUpdate() {
-    console.log('state', this.state);
-  }
+  // componentDidUpdate() {
+  //   console.log('state', this.state);
+  //   this.getUserData();
+  // }
 
     render() {
      
@@ -93,8 +65,9 @@ class App extends Component {
    
     <div className="router">
       <main>
-        <UserList getUserData={this.getUserData} deleteUser={this.deleteUser} setCurrentUser={this.setCurrentUser} users={this.state.users}/>
+        <UserList getUserData={this.getUserData} />
         <User userData={this.state.data} addData={this.addData} />
+        <LifeNotesForm />
       </main>
     </div>
     

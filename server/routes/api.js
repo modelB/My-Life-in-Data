@@ -12,8 +12,7 @@ router.get('/users', personController.getUsers, (req, res) => {
   });
 
 router.get('/userData', (req,res,next)=> {
-  res.locals.name = req.query.name;
-  console.log('query', req.query.name, '     locals name', res.locals.name);
+  console.log('req in api router');
   return next();
 }, personController.getUserData,
   (req, res) => res.status(200).json(res.locals.userData)
@@ -26,21 +25,6 @@ router.post('/addData', (req, res, next) => {
   (req, res) => res.status(200).json('success')
 );
 
-router.delete('/deleteUser',(req, res, next) => {
-    console.log('made in api router');
-    return next();
-},
-  personController.deleteUser,
-  (req, res) => res.status(200).json('success')
-);
-
-router.delete('/deleteData',(req, res, next) => {
-    console.log('made in api router');
-    return next();
-},
-  personController.deleteData,
-  (req, res) => res.status(200).json('success')
-);
 
 
 module.exports = router;

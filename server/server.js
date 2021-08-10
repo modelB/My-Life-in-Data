@@ -4,12 +4,14 @@ const path = require('path');
 const port = 3000;
 const apiRouter = require(path.join(__dirname, './routes/api'));
 console.log('path', path.join(__dirname, './routes/api'));
-
+const personController = require('./controllers/personController');
+const cookieParser = require('cookie-parser');
 server.use(express.json())
 server.use(express.urlencoded({ extended: true }));
-
+server.use(cookieParser());
 console.log('req in server')
 server.use('/api', apiRouter);
+
 
 // app.get('/user', (req, res) => {
 //   return res.status(200).sendFile(path.join('../index.html'));
@@ -22,7 +24,10 @@ server.use('/build', express.static(path.join(__dirname, '../build')));
 // serve index.html on the route '/'
 server.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../index.html'));
-console.log(process.env.NODE_ENV)
+});
+server.post('/auth', personController.signIn, (req, res) => {
+  console.log('see the request after personcontroller');
+  return res.status(200).redirect('/')
 });
 
 // statically serve everything in the build folder on the route '/build'

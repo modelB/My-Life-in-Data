@@ -1,7 +1,7 @@
 import React from 'react';
 import AddDataForm from './AddDataForm';
-import DeleteUserButton from './DeleteUserButton';
 import Graph from './Graph';
+import GoogleLogin from 'react-google-login';
 
 const User = ({
   addData, userData
@@ -9,6 +9,7 @@ const User = ({
   
   return (
     <div id="User">
+     
         <AddDataForm addData={addData} />
         <Graph userData={userData} />
     </div>
